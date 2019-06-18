@@ -25,9 +25,9 @@ var upload = multer({ storage: storage });
 
 var serviceAccount;
 if (process.env.firebaseServiceAccount) {
-  serviceAccount = process.env.firebaseServiceAccount;
+  serviceAccount = JSON.parse(process.env.firebaseServiceAccount);
 } else {
-  serviceAccount = JSON.parse(config.get("firebaseServiceAccount"));
+  serviceAccount = config.get("firebaseServiceAccount");
 }
 
 admin.initializeApp({
