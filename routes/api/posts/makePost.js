@@ -23,7 +23,8 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-var serviceAccount = config.get("firebaseServiceAccount");
+var serviceAccount =
+  process.env.firebaseServiceAccount || config.get("firebaseServiceAccount");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: "gs://review-salad.appspot.com"
