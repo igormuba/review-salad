@@ -9,7 +9,8 @@ function MakePost() {
     preview: "",
     subject: "",
     review: "",
-    selectedFile: null
+    selectedFile: null,
+    redirect: false
   });
 
   const sendForm = async e => {
@@ -24,7 +25,10 @@ function MakePost() {
     console.log(fd);
 
     await axios.post("/api/posts/new", fd);
-    return <Redirect to="/" />;
+    setFormData({
+      ...formData,
+      redirect: true
+    });
   };
   const onChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,60 +41,64 @@ function MakePost() {
     });
   };
 
-  return (
-    <Row>
-      <Col sm />
+  if (formData.redirect) {
+    return <Redirect to="/" />;
+  } else {
+    return (
+      <Row>
+        <Col sm />
 
-      <Col sm>
-        <Form onSubmit={e => sendForm(e)}>
-          <Form.Group controlId="image">
-            <Form.Label>Imagem:</Form.Label>
-            <Form.Control
-              required
-              type="file"
-              name="image"
-              onChange={e => fileSelected(e)}
-            />
-          </Form.Group>
+        <Col sm>
+          <Form onSubmit={e => sendForm(e)}>
+            <Form.Group controlId="image">
+              <Form.Label>Imagem (APENAS PNG OU JPG):</Form.Label>
+              <Form.Control
+                required
+                type="file"
+                name="image"
+                onChange={e => fileSelected(e)}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="subject">
-            <Form.Label>Review de/do/da:</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="subject"
-              onChange={e => onChange(e)}
-            />
-          </Form.Group>
-          <Form.Group controlId="preview">
-            <Form.Label>Preview (máx 120 caracteres):</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="preview"
-              onChange={e => onChange(e)}
-            />
-          </Form.Group>
+            <Form.Group controlId="subject">
+              <Form.Label>Review de/do/da:</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="subject"
+                onChange={e => onChange(e)}
+              />
+            </Form.Group>
+            <Form.Group controlId="preview">
+              <Form.Label>Preview (máx 120 caracteres):</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="preview"
+                onChange={e => onChange(e)}
+              />
+            </Form.Group>
 
-          <Form.Group controlId="review">
-            <Form.Label>O que achou/opinião/análise completa:</Form.Label>
-            <Form.Control
-              required
-              type="text"
-              name="review"
-              onChange={e => onChange(e)}
-            />
-          </Form.Group>
+            <Form.Group controlId="review">
+              <Form.Label>O que achou/opinião/análise completa:</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                name="review"
+                onChange={e => onChange(e)}
+              />
+            </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Publicar
-          </Button>
-        </Form>
-      </Col>
+            <Button variant="primary" type="submit">
+              Publicar
+            </Button>
+          </Form>
+        </Col>
 
-      <Col sm />
-    </Row>
-  );
+        <Col sm />
+      </Row>
+    );
+  }
 }
 
 export default MakePost;

@@ -7,7 +7,12 @@ const User = require("../../models/User");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
-const jwtSecret = process.env.jwtSecret || config.get("jwtSecret");
+let jwtSecret;
+if (process.env.jwtSecret) {
+  jwtSecret = process.env.jwtSecret;
+} else {
+  jwtSecret = config.get("jwtSecret");
+}
 router.post(
   "/",
   [

@@ -10,7 +10,12 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 var ObjectId = require("mongoose").Types.ObjectId;
 
-const jwtSecret = process.env.jwtSecret || config.get("jwtSecret");
+let jwtSecret;
+if (process.env.jwtSecret) {
+  jwtSecret = process.env.jwtSecret;
+} else {
+  jwtSecret = config.get("jwtSecret");
+}
 
 router.get("/", auth, async (req, res) => {
   try {
