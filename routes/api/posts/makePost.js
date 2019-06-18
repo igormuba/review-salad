@@ -27,7 +27,7 @@ var serviceAccount;
 if (process.env.firebaseServiceAccount) {
   serviceAccount = process.env.firebaseServiceAccount;
 } else {
-  serviceAccount = config.get("firebaseServiceAccount");
+  serviceAccount = JSON.parse(config.get("firebaseServiceAccount"));
 }
 
 admin.initializeApp({
