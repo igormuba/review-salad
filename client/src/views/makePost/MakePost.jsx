@@ -48,7 +48,7 @@ function MakePost() {
       <Row>
         <Col sm />
 
-        <Col sm>
+        <Col xs={6}>
           <Form onSubmit={e => sendForm(e)}>
             <Form.Group controlId="image">
               <Form.Label>Imagem (APENAS PNG OU JPG):</Form.Label>
@@ -83,7 +83,7 @@ function MakePost() {
               <Form.Label>O que achou/opinião/análise completa:</Form.Label>
               <Form.Control
                 required
-                type="text"
+                as="textarea"
                 name="review"
                 onChange={e => onChange(e)}
               />

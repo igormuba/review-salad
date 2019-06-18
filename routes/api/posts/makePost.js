@@ -11,6 +11,8 @@ var firebase = require("firebase");
 const config = require("config");
 var admin = require("firebase-admin");
 var path = require("path");
+var fs = require("fs");
+let sanitizeUserInput = require("../../../utils/sanitizeUserInput");
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -47,49 +49,58 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors);
     return res.status(400).json({ errors: errors.array() });
   }
-  // const { subject, preview, review, image, imageName } = req.body;
-  console.log("req.body");
-  console.log(req.body);
+  let cleanSubject = sanitizeUserInput(req.body.subject);
+  let cleanReview = sanitizeUserInput(req.body.review);
+  let cleanPreview = sanitizeUserInput(req.body.preview);
+
   let extension = "";
   let isImage = false;
   let isCharacterLimit = false;
+
   switch (req.file.mimetype) {
     case "image/png":
+      console.log("PNG IMAGE");
       extension = ".png";
       isImage = true;
     case "image/jpg":
+    case "image/jpeg":
+      console.log("JPS IMAGE");
       extension = ".jpg";
       isImage = true;
   }
-  req.body.preview.length <= 120
+
+  cleanPreview.length <= 120
     ? (isCharacterLimit = true)
     : (isCharacterLimit = false);
   if (isImage) {
-    await bucket.upload(
-      `uploads/${req.file.filename}`,
-      async (err, file, apiResponse) => {
-        // bucket.
-        console.log("apiResponse");
-        console.log(apiResponse);
+    let filePathAndName = `uploads/${req.file.filename}`;
+    await bucket.upload(filePathAndName, async (err, file, apiResponse) => {
+      // bucket.
+      console.log("apiResponse");
+      console.log(apiResponse);
 
-        const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${
-          apiResponse.name
-        }`;
-        const subject = req.body.subject;
-        const preview = req.body.preview;
-        const review = req.body.review;
+      const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${
+        apiResponse.name
+      }`;
+      const subject = cleanSubject;
+      const preview = cleanPreview;
+      const review = cleanReview;
 
-        const post = new Post({
-          imageUrl: imageUrl,
-          reviewSubject: subject,
-          reviewPreview: preview,
-          fullReview: review
-        });
-        await post.save();
-      }
-    );
+      const post = new Post({
+        imageUrl: imageUrl,
+        reviewSubject: subject,
+        reviewPreview: preview,
+        fullReview: review
+      });
+      await post.save();
+      fs.unlink(filePathAndName, err => {
+        if (err) throw err;
+        console.log("path/file.txt was deleted");
+      });
+    });
   }
   isImage && isCharacterLimit
     ? res.status(200).send(req.body)

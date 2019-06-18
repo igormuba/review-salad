@@ -66,19 +66,25 @@ function PublicTimeline() {
   let isReviewOpen = usePosts.reviewOpenBool;
   if (isReviewOpen) {
     return (
-      <FullReview
-        imageUrl={usePosts.reviewOpenObject.imageUrl}
-        reviewSubject={usePosts.reviewOpenObject.reviewSubject}
-        reviewPreview={usePosts.reviewOpenObject.reviewPreview}
-        fullReview={usePosts.reviewOpenObject.fullReview}
-        postId={usePosts.reviewOpenObject._id}
-      />
+      <Row>
+        <Col />
+        <Col xs={6}>
+          <FullReview
+            imageUrl={usePosts.reviewOpenObject.imageUrl}
+            reviewSubject={usePosts.reviewOpenObject.reviewSubject}
+            reviewPreview={usePosts.reviewOpenObject.reviewPreview}
+            fullReview={usePosts.reviewOpenObject.fullReview}
+            postId={usePosts.reviewOpenObject._id}
+          />
+        </Col>
+        <Col />
+      </Row>
     );
   } else {
     return (
       <Row>
         <Col />
-        <Col xs={5}>
+        <Col xs={6}>
           <div>{posts}</div>
         </Col>
         <Col />
