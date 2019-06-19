@@ -30,14 +30,18 @@ function PublicTimeline() {
     fullReview,
     user
   ) => {
-    let userProfile = await axios.get("/api/profile/profile", {
-      params: {
-        user: user
-      }
-    });
-    console.log("userProfile");
+    console.log("user");
+    console.log(user);
 
-    console.log(userProfile);
+    let userProfile = {};
+    if (user) {
+      userProfile = await axios.get("/api/profile/profile", {
+        params: {
+          user: user
+        }
+      });
+    }
+
     setPosts({
       ...usePosts,
       reviewOpenBool: true,

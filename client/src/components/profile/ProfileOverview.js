@@ -2,11 +2,11 @@ import React from "react";
 import { Card, Button, ListGroupItem, ListGroup } from "react-bootstrap";
 
 function ProfileOverview(props) {
-  if (!props.userProfile) {
+  let userProfile = props.userProfile.data;
+  if (!userProfile) {
     return <div />;
   }
 
-  let userProfile = props.userProfile.data;
   console.log("userProfile");
   console.log(userProfile);
 

@@ -25,10 +25,7 @@ router.get("/profile", async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: ObjectId(req.query.user) });
     const user = await User.findOne({ _id: ObjectId(req.query.user) });
-    console.log(user);
-    if (!profile) {
-      return res.status(404).json({ msg: "No profile found" });
-    }
+
     res.json({ profile, user });
   } catch (err) {
     console.error(err.message);
