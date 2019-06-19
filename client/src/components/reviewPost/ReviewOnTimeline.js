@@ -3,11 +3,11 @@ import { Card, Button } from "react-bootstrap";
 
 const ReviewOnTimeline = props => {
   const timelineImageStyles = {
-    "object-fit": "none",
-    "object-position": "center",
+    objectFit: "none",
+    objectPosition: "center",
     width: "100%",
-    "max-height": "300px",
-    "margin-bottom": "1rem"
+    maxHeight: "300px",
+    marginBottom: "1rem"
   };
 
   return (

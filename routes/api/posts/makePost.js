@@ -62,12 +62,10 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
 
   switch (req.file.mimetype) {
     case "image/png":
-      console.log("PNG IMAGE");
       extension = ".png";
       isImage = true;
     case "image/jpg":
     case "image/jpeg":
-      console.log("JPS IMAGE");
       extension = ".jpg";
       isImage = true;
   }

@@ -17,4 +17,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/more", async (req, res) => {
+  try {
+    const createdOnBefore = req.query.createdOnBefore;
+
+    const posts = await Post.find({ date: { $lt: createdOnBefore } })
+      .sort([["date", "descending"]])
+      .limit(5);
+    res.json(posts);
+    res.json(createdOnBefore);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

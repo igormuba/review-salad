@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReviewOnTimeline from "../../../components/reviewPost/ReviewOnTimeline";
 import FullReview from "../../../components/reviewPost/FullReview";
 import axios from "axios";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Button } from "react-bootstrap";
 
 function PublicTimeline() {
   const [usePosts, setPosts] = useState({ reviewOpen: false });
@@ -10,10 +10,11 @@ function PublicTimeline() {
   let posts = [];
 
   const getPosts = async () => {
-    let posts = await axios.get("/api/posts/public");
+    let firstPosts = await axios.get("/api/posts/public");
+
     setPosts({
       ...usePosts,
-      posts: posts.data
+      posts: firstPosts.data
     });
   };
   useEffect(() => {
@@ -62,6 +63,46 @@ function PublicTimeline() {
       );
     });
   }
+  const loadMorePosts = async () => {
+    console.log("LOADING MORE POSTS");
+    let postsInState = usePosts.posts;
+    if (postsInState) {
+      let lastPostDate = postsInState[posts.length - 1].date;
+      let morePosts = await axios.get("/api/posts/public/more", {
+        params: {
+          createdOnBefore: lastPostDate
+        }
+      });
+      if (morePosts.data) {
+        morePosts.data.forEach(newPost => {
+          let loadedPosts = usePosts.posts;
+          loadedPosts.push(newPost);
+          setPosts({
+            ...usePosts,
+            posts: loadedPosts
+          });
+          posts.push(
+            <ReviewOnTimeline
+              imageUrl={newPost.imageUrl}
+              reviewSubject={newPost.reviewSubject}
+              reviewPreview={newPost.reviewPreview}
+              fullReview={newPost.fullReview}
+              postId={newPost._id}
+              openPost={e =>
+                openAPost(
+                  newPost._id,
+                  newPost.imageUrl,
+                  newPost.reviewSubject,
+                  newPost.reviewPreview,
+                  newPost.fullReview
+                )
+              }
+            />
+          );
+        });
+      }
+    }
+  };
 
   let isReviewOpen = usePosts.reviewOpenBool;
   if (isReviewOpen) {
@@ -86,6 +127,14 @@ function PublicTimeline() {
         <Col />
         <Col xs={6}>
           <div>{posts}</div>
+          <Button
+            size="lg"
+            block
+            variant="outline-success"
+            onClick={e => loadMorePosts()}
+          >
+            Carregar mais
+          </Button>
         </Col>
         <Col />
       </Row>
