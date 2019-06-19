@@ -43,9 +43,8 @@ var bucket = admin.storage().bucket();
 router.post("/", [auth, upload.single("image")], async (req, res) => {
   bucket.makePublic({ includeFiles: true });
 
-  const user = await User.findById({ _id: new ObjectId(req.user.id) }).select(
-    "-password"
-  );
+  const user = await User.findById({ _id: new ObjectId(req.user.id) });
+  console.log(user);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -76,10 +75,6 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   if (isImage) {
     let filePathAndName = `uploads/${req.file.filename}`;
     await bucket.upload(filePathAndName, async (err, file, apiResponse) => {
-      // bucket.
-      console.log("apiResponse");
-      console.log(apiResponse);
-
       const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${
         apiResponse.name
       }`;
@@ -88,6 +83,7 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
       const review = cleanReview;
 
       const post = new Post({
+        user: user,
         imageUrl: imageUrl,
         reviewSubject: subject,
         reviewPreview: preview,

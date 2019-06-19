@@ -3,15 +3,16 @@ import ReviewOnTimeline from "../../../components/reviewPost/ReviewOnTimeline";
 import FullReview from "../../../components/reviewPost/FullReview";
 import axios from "axios";
 import { Col, Row, Button } from "react-bootstrap";
+import ProfileOverview from "../../../components/profile/ProfileOverview";
 
 function PublicTimeline() {
-  const [usePosts, setPosts] = useState({ reviewOpen: false });
+  const [usePosts, setPosts] = useState({});
 
   let posts = [];
 
   const getPosts = async () => {
     let firstPosts = await axios.get("/api/posts/public");
-
+    console.log(firstPosts);
     setPosts({
       ...usePosts,
       posts: firstPosts.data
@@ -21,21 +22,33 @@ function PublicTimeline() {
     getPosts();
   }, []);
 
-  const openAPost = (
+  const openAPost = async (
     postId,
     imageUrl,
     reviewSubject,
     reviewPreview,
-    fullReview
+    fullReview,
+    user
   ) => {
+    let userProfile = await axios.get("/api/profile/profile", {
+      params: {
+        user: user
+      }
+    });
+    console.log("userProfile");
+
+    console.log(userProfile);
     setPosts({
+      ...usePosts,
       reviewOpenBool: true,
       reviewOpenObject: {
         postId,
         imageUrl,
         reviewSubject,
         reviewPreview,
-        fullReview
+        fullReview,
+        user,
+        userProfile
       }
     });
   };
@@ -43,6 +56,10 @@ function PublicTimeline() {
   let postsInState = usePosts.posts;
   if (postsInState) {
     postsInState.forEach(post => {
+      let user = "";
+      if (post.user) {
+        user = post.user;
+      }
       posts.push(
         <ReviewOnTimeline
           imageUrl={post.imageUrl}
@@ -50,21 +67,13 @@ function PublicTimeline() {
           reviewPreview={post.reviewPreview}
           fullReview={post.fullReview}
           postId={post._id}
-          openPost={e =>
-            openAPost(
-              post._id,
-              post.imageUrl,
-              post.reviewSubject,
-              post.reviewPreview,
-              post.fullReview
-            )
-          }
+          openPost={openAPost}
+          user={user}
         />
       );
     });
   }
   const loadMorePosts = async () => {
-    console.log("LOADING MORE POSTS");
     let postsInState = usePosts.posts;
     if (postsInState) {
       let lastPostDate = postsInState[posts.length - 1].date;
@@ -75,6 +84,10 @@ function PublicTimeline() {
       });
       if (morePosts.data) {
         morePosts.data.forEach(newPost => {
+          let user = "";
+          if (newPost.user) {
+            user = newPost.user;
+          }
           let loadedPosts = usePosts.posts;
           loadedPosts.push(newPost);
           setPosts({
@@ -88,15 +101,8 @@ function PublicTimeline() {
               reviewPreview={newPost.reviewPreview}
               fullReview={newPost.fullReview}
               postId={newPost._id}
-              openPost={e =>
-                openAPost(
-                  newPost._id,
-                  newPost.imageUrl,
-                  newPost.reviewSubject,
-                  newPost.reviewPreview,
-                  newPost.fullReview
-                )
-              }
+              user={user}
+              openPost={openAPost}
             />
           );
         });
@@ -104,21 +110,37 @@ function PublicTimeline() {
     }
   };
 
-  let isReviewOpen = usePosts.reviewOpenBool;
-  if (isReviewOpen) {
+  const closeFullReview = (loadedPostsOnState, loadedPostsOnTimeline) => {
+    posts = loadedPostsOnTimeline;
+    setPosts({
+      ...usePosts,
+      posts: loadedPostsOnState,
+      reviewOpenBool: false
+    });
+  };
+
+  if (usePosts.reviewOpenBool) {
     return (
       <Row>
         <Col />
         <Col xs={6}>
           <FullReview
+            closeFullReview={closeFullReview}
             imageUrl={usePosts.reviewOpenObject.imageUrl}
             reviewSubject={usePosts.reviewOpenObject.reviewSubject}
             reviewPreview={usePosts.reviewOpenObject.reviewPreview}
             fullReview={usePosts.reviewOpenObject.fullReview}
             postId={usePosts.reviewOpenObject._id}
+            loadedPostsOnState={usePosts.posts}
+            loadedPostsOnTimeline={posts}
           />
         </Col>
-        <Col />
+        <Col>
+          <ProfileOverview
+            user={usePosts.reviewOpenObject.user}
+            userProfile={usePosts.reviewOpenObject.userProfile}
+          />
+        </Col>
       </Row>
     );
   } else {

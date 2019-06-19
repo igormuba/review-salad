@@ -14,15 +14,22 @@ const NavigationBar = ({ auth: { isAuthenticated, loading }, logout }) => {
         </Nav.Link>
         <Button variant="outline-secondary">
           <NavDropdown
-            title={<i className="far fa-user-circle">Perfil</i>}
+            title={
+              <>
+                <i className="far fa-user-circle" />
+                <span>Perfil</span>
+              </>
+            }
             id="basic-nav-dropdown"
           >
             <NavDropdown.Item href="/profile">
-              <i className="far fa-user-circle">Perfil</i>
+              <i className="far fa-user-circle" />
+              Perfil
             </NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={logout}>
-              <i className="fas fa-sign-out-alt">Sair</i>
+              <i className="fas fa-sign-out-alt" />
+              Sair
             </NavDropdown.Item>
           </NavDropdown>
         </Button>
@@ -33,10 +40,12 @@ const NavigationBar = ({ auth: { isAuthenticated, loading }, logout }) => {
     <div>
       <NavDropdown title="Perfil" id="basic-nav-dropdown">
         <NavDropdown.Item href="/login">
-          <i className="far fa-user-circle">Login</i>
+          <i className="far fa-user-circle" />
+          Login
         </NavDropdown.Item>
         <NavDropdown.Item href="/register">
-          <i className="far fa-user-circle">Registrar</i>
+          <i className="far fa-user-circle" />
+          Registrar
         </NavDropdown.Item>
       </NavDropdown>
     </div>

@@ -4,18 +4,19 @@ import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
-function MakePost() {
+function MakePost(user) {
   const [formData, setFormData] = useState({
     preview: "",
     subject: "",
     review: "",
     selectedFile: null,
-    redirect: false
+    redirect: false,
+    buttonDisabled: false
   });
 
   const sendForm = async e => {
     e.preventDefault();
-
+    setFormData({ ...formData, buttonDisabled: true });
     const fd = new FormData();
     fd.append("imageName", formData.selectedFile.name);
     fd.append("image", formData.selectedFile, formData.selectedFile.name);
@@ -27,7 +28,8 @@ function MakePost() {
     await axios.post("/api/posts/new", fd);
     setFormData({
       ...formData,
-      redirect: true
+      redirect: true,
+      user
     });
   };
   const onChange = e => {
@@ -89,8 +91,16 @@ function MakePost() {
               />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
-              Publicar
+            <Button
+              variant="primary"
+              type="submit"
+              buttonDisabled={formData.isLoading}
+            >
+              {!formData.isLoading ? (
+                <span>Publicar</span>
+              ) : (
+                <span>Carregando</span>
+              )}
             </Button>
           </Form>
         </Col>
@@ -101,4 +111,8 @@ function MakePost() {
   }
 }
 
-export default MakePost;
+const mapStateToProps = state => ({
+  user: state.auth.user
+});
+
+export default connect(mapStateToProps)(MakePost);

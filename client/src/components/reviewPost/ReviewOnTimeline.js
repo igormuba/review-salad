@@ -6,7 +6,7 @@ const ReviewOnTimeline = props => {
     objectFit: "none",
     objectPosition: "center",
     width: "100%",
-    maxHeight: "300px",
+    maxHeight: "400px",
     marginBottom: "1rem"
   };
 
@@ -29,7 +29,8 @@ const ReviewOnTimeline = props => {
               props.imageUrl,
               props.reviewSubject,
               props.reviewPreview,
-              props.fullReview
+              props.fullReview,
+              props.user
             )
           }
         >
