@@ -44,7 +44,6 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   bucket.makePublic({ includeFiles: true });
 
   const user = await User.findById({ _id: new ObjectId(req.user.id) });
-  console.log(user);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

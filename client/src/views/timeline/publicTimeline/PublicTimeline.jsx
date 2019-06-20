@@ -4,6 +4,7 @@ import FullReview from "../../../components/reviewPost/FullReview";
 import axios from "axios";
 import { Col, Row, Button } from "react-bootstrap";
 import ProfileOverview from "../../../components/profile/ProfileOverview";
+import FullReviewComment from "../../../components/reviewPost/FullReviewComments";
 
 function PublicTimeline() {
   const [usePosts, setPosts] = useState({});
@@ -138,6 +139,8 @@ function PublicTimeline() {
             loadedPostsOnState={usePosts.posts}
             loadedPostsOnTimeline={posts}
           />
+          <br />
+          <FullReviewComment post={usePosts.reviewOpenObject.postId} />
         </Col>
         <Col>
           <ProfileOverview
