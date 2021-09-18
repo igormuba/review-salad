@@ -33,56 +33,58 @@ function ProfileOverview(props) {
 
   let socialLinks = [];
 
-  if (userProfile.profile.social) {
-    if (userProfile.profile.social.discord) {
-      socialLinks.push(
-        <ListGroupItem>
-          <a href={userProfile.profile.social.discord}>
-            <i className="fab fa-discord" />
-            &nbsp; Discord
-          </a>
-        </ListGroupItem>
-      );
-    }
-    if (userProfile.profile.social.facebook) {
-      socialLinks.push(
-        <ListGroupItem>
-          <a href={userProfile.profile.social.facebook}>
-            <i className="fab fa-facebook-square" />
-            &nbsp; Facebook
-          </a>
-        </ListGroupItem>
-      );
-    }
-    if (userProfile.profile.social.instagram) {
-      socialLinks.push(
-        <ListGroupItem>
-          <a href={userProfile.profile.social.instagram}>
-            <i className="fab fa-instagram" />
-            &nbsp; Instagram
-          </a>
-        </ListGroupItem>
-      );
-    }
-    if (userProfile.profile.social.twitter) {
-      socialLinks.push(
-        <ListGroupItem>
-          <a href={userProfile.profile.social.twitter}>
-            <i className="fab fa-twitter-square" />
-            &nbsp; Twitter
-          </a>
-        </ListGroupItem>
-      );
-    }
-    if (userProfile.profile.social.youtube) {
-      socialLinks.push(
-        <ListGroupItem>
-          <a href={userProfile.profile.social.youtube}>
-            <i className="fab fa-youtube" />
-            &nbsp; Youtube
-          </a>
-        </ListGroupItem>
-      );
+  if (userProfile.profile) {
+    if (userProfile.profile.social) {
+      if (userProfile.profile.social.discord) {
+        socialLinks.push(
+          <ListGroupItem>
+            <a href={userProfile.profile.social.discord}>
+              <i className="fab fa-discord" />
+              &nbsp; Discord
+            </a>
+          </ListGroupItem>
+        );
+      }
+      if (userProfile.profile.social.facebook) {
+        socialLinks.push(
+          <ListGroupItem>
+            <a href={userProfile.profile.social.facebook}>
+              <i className="fab fa-facebook-square" />
+              &nbsp; Facebook
+            </a>
+          </ListGroupItem>
+        );
+      }
+      if (userProfile.profile.social.instagram) {
+        socialLinks.push(
+          <ListGroupItem>
+            <a href={userProfile.profile.social.instagram}>
+              <i className="fab fa-instagram" />
+              &nbsp; Instagram
+            </a>
+          </ListGroupItem>
+        );
+      }
+      if (userProfile.profile.social.twitter) {
+        socialLinks.push(
+          <ListGroupItem>
+            <a href={userProfile.profile.social.twitter}>
+              <i className="fab fa-twitter-square" />
+              &nbsp; Twitter
+            </a>
+          </ListGroupItem>
+        );
+      }
+      if (userProfile.profile.social.youtube) {
+        socialLinks.push(
+          <ListGroupItem>
+            <a href={userProfile.profile.social.youtube}>
+              <i className="fab fa-youtube" />
+              &nbsp; Youtube
+            </a>
+          </ListGroupItem>
+        );
+      }
     }
   }
 
