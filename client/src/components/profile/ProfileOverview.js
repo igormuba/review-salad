@@ -15,12 +15,14 @@ function ProfileOverview(props) {
     objectPosition: "center",
     width: "100%",
     maxHeight: "200px",
-    marginBottom: "1rem"
+    marginBottom: "1rem",
   };
 
   let bio;
-  if (userProfile.profile.bio) {
-    bio = <Card.Text>{userProfile.profile.bio}</Card.Text>;
+  if (userProfile.profile) {
+    if (userProfile.profile.bio) {
+      bio = <Card.Text>{userProfile.profile.bio}</Card.Text>;
+    }
   } else {
     bio = (
       <Card.Text>
