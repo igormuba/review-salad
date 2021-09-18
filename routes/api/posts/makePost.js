@@ -15,12 +15,12 @@ var fs = require("fs");
 let sanitizeUserInput = require("../../../utils/sanitizeUserInput");
 
 var storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: function (req, file, cb) {
     cb(null, "uploads/");
   },
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname)); //Appending extension
-  }
+  },
 });
 
 var upload = multer({ storage: storage });
@@ -34,7 +34,7 @@ if (process.env.firebaseServiceAccount) {
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "gs://review-salad.appspot.com"
+  storageBucket: "gs://review-salad-47f83.appspot.com",
 });
 
 var storageRef = admin.storage();
@@ -74,9 +74,7 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   if (isImage) {
     let filePathAndName = `uploads/${req.file.filename}`;
     await bucket.upload(filePathAndName, async (err, file, apiResponse) => {
-      const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${
-        apiResponse.name
-      }`;
+      const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${apiResponse.name}`;
       const subject = cleanSubject;
       const preview = cleanPreview;
       const review = cleanReview;
@@ -86,10 +84,10 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
         imageUrl: imageUrl,
         reviewSubject: subject,
         reviewPreview: preview,
-        fullReview: review
+        fullReview: review,
       });
       await post.save();
-      fs.unlink(filePathAndName, err => {
+      fs.unlink(filePathAndName, (err) => {
         if (err) throw err;
         console.log("path/file.txt was deleted");
       });
