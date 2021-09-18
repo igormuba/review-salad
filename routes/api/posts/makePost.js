@@ -74,7 +74,7 @@ router.post("/", [auth, upload.single("image")], async (req, res) => {
   if (isImage) {
     let filePathAndName = `uploads/${req.file.filename}`;
     await bucket.upload(filePathAndName, async (err, file, apiResponse) => {
-      const imageUrl = `https://storage.googleapis.com/review-salad.appspot.com/${apiResponse.name}`;
+      const imageUrl = `https://storage.googleapis.com/review-salad-47f83.appspot.com/${apiResponse.name}`;
       const subject = cleanSubject;
       const preview = cleanPreview;
       const review = cleanReview;
